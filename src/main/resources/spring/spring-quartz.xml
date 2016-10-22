@@ -1,0 +1,54 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.cdr.controller"/>
+    <bean id="day_task" class="com.cdr.controller.DailyTask"/>
+    <bean id="methodInvokingJobDetailFactoryBean" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="day_task"/>
+        </property>
+        <property name="targetMethod">
+            <value>dayTask</value>
+        </property>
+    </bean>
+    <bean id="cronTriggerFactoryBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="methodInvokingJobDetailFactoryBean"></property>
+        <property name="cronExpression" value="0 12 12 12 12 ?"></property>
+    </bean>
+    <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="cronTriggerFactoryBean"></ref>
+            </list>
+        </property>
+    </bean>
+
+
+    <bean id="fail_retry" class="com.cdr.controller.RetryTask"/>
+    <bean id="methodInvokingJobDetailFactoryBean_retry" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="fail_retry"/>
+        </property>
+        <property name="targetMethod">
+            <value>retryFailTask</value>
+        </property>
+    </bean>
+    <bean id="cronTriggerFactoryBean_retry" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="methodInvokingJobDetailFactoryBean_retry"></property>
+        <property name="cronExpression" value="0 10 12 12 12 ?"></property>
+    </bean>
+    <bean id="schedulerFactoryBean_retry" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="cronTriggerFactoryBean_retry"></ref>
+            </list>
+        </property>
+    </bean>
+
+</beans>

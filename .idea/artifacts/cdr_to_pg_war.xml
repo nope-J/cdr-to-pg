@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="cdr-to-pg:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="cdr-to-pg-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="cdr-to-pg:war exploded" />
+    </root>
+  </artifact>
+</component>
